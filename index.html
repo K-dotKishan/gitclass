@@ -3,9 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Products</title>
+    <script src="script.js" defer></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .product img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
-    
+    <h1>Product Store</h1>
+    <div id="card"></div>
+
 </body>
 </html>
