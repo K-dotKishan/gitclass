@@ -3,43 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    <title>Search</title>
     <script src="script.js" defer></script>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        .search-box {
-            margin-bottom: 20px;
-        }
-
+        body { font-family: Arial, sans-serif; }
         input {
             padding: 8px;
             width: 250px;
-            font-size: 16px;
+            margin-bottom: 20px;
         }
-
-        button {
-            padding: 8px 12px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
         #card {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
         }
-
         .product {
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 6px;
         }
-
         .product img {
             width: 100%;
             height: 150px;
@@ -49,24 +32,12 @@
 </head>
 <body>
 
-    <h1>Product Store</h1>
+    <h1>Search Products</h1>
+    <a href="index.html">Back</a><br><br>
 
-    <!-- Search section -->
-    <div class="search-box">
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search product..."
-        />
-        <button id="search">Search</button>
+    <!-- Search bar (NO inline JS) -->
+    <input type="text" id="searchInput" placeholder="Search product..." />
 
-
-
-    </div>
-
-    <div id="suggestions"></div>
-
-    <!-- Products -->
     <div id="card"></div>
 
 </body>
