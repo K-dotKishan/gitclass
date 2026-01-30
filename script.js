@@ -19,6 +19,11 @@ function renderProducts(products) {
             <p>₹ ${product.price}</p>
         `;
 
+        // 👉 OPEN PRODUCT DETAILS
+        div.addEventListener("click", () => {
+            window.location.href = `productdetails.html?id=${product.id}`;
+        });
+
         card.appendChild(div);
     });
 }
@@ -42,7 +47,7 @@ searchBtn.addEventListener('click', () => {
 
     renderProducts(filtered);
 
-    // Save suggestion (UNCHANGED LOGIC)
+    // Save suggestion (UNCHANGED)
     let suggestions = JSON.parse(localStorage.getItem('suggestions')) || [];
     if (!suggestions.some(s => s.query === query)) {
         suggestions.push({ query: query, time: Date.now() });
@@ -50,13 +55,12 @@ searchBtn.addEventListener('click', () => {
     }
 });
 
-// INPUT EVENT (kept ALL console.logs)
+// INPUT EVENT (ALL console.logs kept)
 searchInput.addEventListener('input', () => {
     console.log("suggestion working");
 
     const text = searchInput.value.toLowerCase();
 
-    // 🔧 FIXED KEY NAME ONLY
     const history = JSON.parse(localStorage.getItem("suggestions")) || [];
     console.log(history);
 
@@ -74,9 +78,12 @@ searchInput.addEventListener('input', () => {
 
         div.addEventListener("click", () => {
             searchInput.value = item.query;
-
-            // 🔧 FIXED: clear suggestion box, not input
             suggestion.innerHTML = "";
+
+            const filtered = allProducts.filter(product =>
+                product.title.toLowerCase().includes(item.query.toLowerCase())
+            );
+            renderProducts(filtered);
         });
 
         suggestion.appendChild(div);
