@@ -8,19 +8,79 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Segoe UI", Arial, sans-serif;
             padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa, #e4ebf5);
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: #2c3e50;
+        }
+
+        /* Buttons container feel (without changing structure) */
+        a button,
+        #clearHistory {
+            padding: 10px 16px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 20px;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        a button {
+            background: #bdc3c7;
+            color: #2c3e50;
+        }
+
+        a button:hover {
+            background: #95a5a6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        #clearHistory {
+            background: #e74c3c;
+            color: white;
+        }
+
+        #clearHistory:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* History list container */
+        #history {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
         }
 
         .history-item {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
+            padding: 14px 18px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.25s, padding-left 0.25s;
         }
 
-        button {
-            padding: 6px 10px;
-            cursor: pointer;
-            margin-bottom: 10px;
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item:hover {
+            background: #f0f6ff;
+            padding-left: 26px;
         }
     </style>
 </head>

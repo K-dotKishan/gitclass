@@ -3,12 +3,16 @@ const searchBtn = document.getElementById('search');
 const searchInput = document.getElementById('searchInput');
 const suggestion = document.getElementById('suggestions');
 
+// ✅ READ SEARCH FROM URL
+const urlParams = new URLSearchParams(window.location.search);
+const searchQueryFromURL = urlParams.get("search");
+
 let allProducts = [];
-let currentProducts = []; // products after search
+let currentProducts = [];
 let currentPage = 1;
 const itemsPerPage = 6;
 
-/* ---------------- PAGINATION UI (CREATED VIA JS) ---------------- */
+/* ---------------- PAGINATION UI ---------------- */
 const paginationBox = document.createElement("div");
 paginationBox.style.marginTop = "20px";
 
@@ -26,9 +30,9 @@ paginationBox.appendChild(pageInfo);
 paginationBox.appendChild(nextBtn);
 
 card.after(paginationBox);
-/* --------------------------------------------------------------- */
+/* ---------------------------------------------- */
 
-// Render products WITH pagination
+// Render products
 function renderProducts(products) {
     currentProducts = products;
     card.innerHTML = "";
@@ -42,12 +46,12 @@ function renderProducts(products) {
         div.className = 'product';
 
         div.innerHTML = `
-            <img src="${product.thumbnail}" alt="${product.title}">
+            <img src="${product.images[0]}" alt="${product.title}">
             <h3>${product.title}</h3>
             <p>₹ ${product.price}</p>
         `;
 
-        // OPEN PRODUCT DETAILS
+        // ✅ OPEN PRODUCT DETAILS WITH ID
         div.addEventListener("click", () => {
             window.location.href = `productdetails.html?id=${product.id}`;
         });
@@ -68,11 +72,21 @@ fetch('https://dummyjson.com/products')
     .then(data => {
         allProducts = data.products;
         currentPage = 1;
-        renderProducts(allProducts);
+
+        // ✅ AUTO SEARCH FROM URL
+        if (searchQueryFromURL) {
+            searchInput.value = searchQueryFromURL;
+            const filtered = allProducts.filter(product =>
+                product.title.toLowerCase().includes(searchQueryFromURL.toLowerCase())
+            );
+            renderProducts(filtered);
+        } else {
+            renderProducts(allProducts);
+        }
     })
     .catch(err => console.error(err));
 
-// Search button click
+// Search button
 searchBtn.addEventListener('click', () => {
     const query = searchInput.value.toLowerCase();
 
@@ -83,27 +97,22 @@ searchBtn.addEventListener('click', () => {
     currentPage = 1;
     renderProducts(filtered);
 
-    // Save suggestion (UNCHANGED)
+    // Save search history
     let suggestions = JSON.parse(localStorage.getItem('suggestions')) || [];
-    if (!suggestions.some(s => s.query === query)) {
-        suggestions.push({ query: query, time: Date.now() });
+    if (query && !suggestions.some(s => s.query === query)) {
+        suggestions.push({ query, time: Date.now() });
         localStorage.setItem('suggestions', JSON.stringify(suggestions));
     }
 });
 
-// INPUT EVENT (ALL console.logs kept)
+// Suggestions
 searchInput.addEventListener('input', () => {
-    console.log("suggestion working");
-
     const text = searchInput.value.toLowerCase();
-
     const history = JSON.parse(localStorage.getItem("suggestions")) || [];
-    console.log(history);
 
     const matches = history.filter(item =>
         item.query.toLowerCase().includes(text)
     );
-    console.log(matches);
 
     suggestion.innerHTML = "";
 
@@ -128,7 +137,7 @@ searchInput.addEventListener('input', () => {
     });
 });
 
-// Pagination buttons
+// Pagination
 prevBtn.addEventListener("click", () => {
     if (currentPage > 1) {
         currentPage--;

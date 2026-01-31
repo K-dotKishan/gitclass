@@ -1,10 +1,10 @@
 const historyBox = document.getElementById("history");
 const clearBtn = document.getElementById("clearHistory");
 
-// Get history from localStorage
+// Get history
 const history = JSON.parse(localStorage.getItem("suggestions")) || [];
 
-// Sort by latest first
+// Sort latest first
 history.sort((a, b) => b.time - a.time);
 
 // Render history
@@ -16,9 +16,10 @@ if (history.length === 0) {
         div.className = "history-item";
         div.innerText = item.query;
 
-        // ✅ IMPORTANT: relative path (NO leading slash)
+        // ✅ REDIRECT TO PRODUCT LIST WITH SEARCH
         div.addEventListener("click", () => {
-            window.location.href = `productdetails.html?id=${item.id}`;
+            window.location.href =
+                `index.html?search=${encodeURIComponent(item.query)}`;
         });
 
         historyBox.appendChild(div);
