@@ -4,12 +4,40 @@ const searchInput = document.getElementById('searchInput');
 const suggestion = document.getElementById('suggestions');
 
 let allProducts = [];
+let currentProducts = []; // products after search
+let currentPage = 1;
+const itemsPerPage = 6;
 
-// Render products
+/* ---------------- PAGINATION UI (CREATED VIA JS) ---------------- */
+const paginationBox = document.createElement("div");
+paginationBox.style.marginTop = "20px";
+
+const prevBtn = document.createElement("button");
+prevBtn.innerText = "Prev";
+
+const pageInfo = document.createElement("span");
+pageInfo.style.margin = "0 10px";
+
+const nextBtn = document.createElement("button");
+nextBtn.innerText = "Next";
+
+paginationBox.appendChild(prevBtn);
+paginationBox.appendChild(pageInfo);
+paginationBox.appendChild(nextBtn);
+
+card.after(paginationBox);
+/* --------------------------------------------------------------- */
+
+// Render products WITH pagination
 function renderProducts(products) {
-    card.innerHTML = '';
+    currentProducts = products;
+    card.innerHTML = "";
 
-    products.forEach(product => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageItems = products.slice(start, end);
+
+    pageItems.forEach(product => {
         const div = document.createElement('div');
         div.className = 'product';
 
@@ -19,13 +47,19 @@ function renderProducts(products) {
             <p>₹ ${product.price}</p>
         `;
 
-        // 👉 OPEN PRODUCT DETAILS
+        // OPEN PRODUCT DETAILS
         div.addEventListener("click", () => {
             window.location.href = `productdetails.html?id=${product.id}`;
         });
 
         card.appendChild(div);
     });
+
+    const totalPages = Math.ceil(products.length / itemsPerPage) || 1;
+    pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
 }
 
 // Initial fetch
@@ -33,6 +67,7 @@ fetch('https://dummyjson.com/products')
     .then(res => res.json())
     .then(data => {
         allProducts = data.products;
+        currentPage = 1;
         renderProducts(allProducts);
     })
     .catch(err => console.error(err));
@@ -45,6 +80,7 @@ searchBtn.addEventListener('click', () => {
         product.title.toLowerCase().includes(query)
     );
 
+    currentPage = 1;
     renderProducts(filtered);
 
     // Save suggestion (UNCHANGED)
@@ -83,9 +119,29 @@ searchInput.addEventListener('input', () => {
             const filtered = allProducts.filter(product =>
                 product.title.toLowerCase().includes(item.query.toLowerCase())
             );
+
+            currentPage = 1;
             renderProducts(filtered);
         });
 
         suggestion.appendChild(div);
     });
+});
+
+// Pagination buttons
+prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderProducts(currentProducts);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+});
+
+nextBtn.addEventListener("click", () => {
+    const totalPages = Math.ceil(currentProducts.length / itemsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderProducts(currentProducts);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 });
